@@ -1,0 +1,11 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"daily": "Diario",
+    "weekly": "Semanal",
+    "daily_almanax": "Almanaque Diario",
+    "weekly_almanax": "Almanaque Semanal",
+    "almanax_search": "Búsqueda de Almanaque",
+    "type": "Tipo",
+    "loot": "Ofrenda",
+    "quantity": "Cantidad"
+}
