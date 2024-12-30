@@ -3,22 +3,28 @@
     let isOpen = false;
 </script>
 
-<nav class="bg-white shadow-md p-4">
-    <div class="container mx-auto flex justify-between items-center">
+<nav class="bg-[#10100e] py-4 px-6">
+    <div class="max-w-7xl mx-auto flex justify-between items-center h-8">
         <div class="flex items-center gap-2">
-            <img src="/Dolmanax.webp" alt="Logo" class="h-8 w-8" />
-            <a href="/" aria-label="Daily Almanax" class="text-xl font-bold">Dalmanax</a>
+            <img src="/Dolmanax.webp" alt="Logo" class="h-12 w-12" />
+            <a href="/" aria-label="Daily Almanax" class="text-2xl font-bold text-[#ffffe6]">Dalmanax</a>
         </div>
 
         <!-- Desktop Menu -->
-        <div class="hidden md:flex gap-6">
-            <a href="/" aria-label="Daily Almanax" class="text-gray-600 hover:text-blue-500">{daily()}</a>
-            <a href="/weekly" aria-label="Weekly Almanax" class="text-gray-600 hover:text-blue-500">{weekly()}</a>
-            <a href="/search" aria-label="Search Almanax" class="text-gray-600 hover:text-blue-500">{almanax_search()}</a>
+        <div class="hidden md:flex gap-6 items-center text-base font-semibold">
+            <a href="/" aria-label="Daily Almanax" class="text-[#ffffe6] text-xl">{daily()}</a>
+            <a href="/weekly" aria-label="Weekly Almanax" class="text-[#ffffe6] text-xl">{weekly()}</a>
+            <a href="/search" aria-label="Search Almanax">
+                <img src="/search.svg" alt="Search" class="w-4 h-4 mt-[0.25rem]" />
+            </a>
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="md:hidden" on:click={() => isOpen = !isOpen}>
+        <button
+            class="md:hidden text-[#ffffe6]"
+            on:click={() => (isOpen = !isOpen)}
+            aria-label={isOpen ? 'Close Menu' : 'Open Menu'}
+        >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {#if isOpen}
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -31,10 +37,13 @@
 
     <!-- Mobile Menu -->
     {#if isOpen}
-        <div class="md:hidden pt-4 pb-2 space-y-2">
-            <a href="/" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">{daily()}</a>
-            <a href="/weekly" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">{weekly()}</a>
-            <a href="/search" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">{almanax_search()}</a>
+        <div class="md:hidden mt-4 text-base font-semibold">
+            <a href="/" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{daily()}</a>
+            <a href="/weekly" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{weekly()}</a>
+            <a href="/search" class="flex items-center gap-2 px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">
+                {almanax_search()}
+                <img src="/loading.svg" alt="Search" class="w-4 h-4" />
+            </a>
         </div>
     {/if}
 </nav>

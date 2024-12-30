@@ -6,9 +6,15 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</svelte:head>
+
 <ParaglideJS {i18n}>
-	<Navbar />
-	<main class="container mx-auto px-4 py-8">
-		{@render children()}
-	</main>
+	<div class="min-h-screen bg-[#10100e] font-['Montserrat'] text-base">
+		<Navbar />
+		<main class="container mx-auto px-4">
+			{@render children()}
+		</main>
+	</div>
 </ParaglideJS>
