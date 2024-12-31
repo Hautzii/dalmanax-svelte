@@ -9,6 +9,32 @@
     let showToast = false;
     let currentIndex = 0;
     let api: any;
+    let descriptionElements: HTMLParagraphElement[] = [];
+
+    $: if (items.length > 0 && descriptionElements.length > 0) {
+        descriptionElements.forEach(element => {
+            if (element) {
+                const lineHeight = parseInt(window.getComputedStyle(element).lineHeight);
+                const height = element.offsetHeight;
+                const lines = height / lineHeight;
+                
+                if (lines > 3) {
+                    element.style.fontSize = '0.875rem';
+                } else {
+                    element.style.fontSize = '1rem';
+                }
+            }
+        });
+    }
+
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
 
     function copyToClipboard(text: string) {
         navigator.clipboard.writeText(text);
@@ -17,14 +43,6 @@
             showToast = false;
         }, 2000);
     }
-
-    const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString(undefined, { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-    };
 
     const onInit = (e: any) => {
         api = e.detail;
@@ -38,8 +56,6 @@
     };
 </script>
 
-<Toast bind:show={showToast} />
-
 <div class="w-[65vw] mx-auto">
     {#if items.length > 0}
         <div class="relative py-6" in:fade={{ duration: 300 }}>
@@ -50,7 +66,7 @@
                     class="overflow-hidden"
                 >
                     <div class="flex">
-                        {#each items as item}
+                        {#each items as item, i}
                             <div class="flex-[0_0_100%] min-w-0">
                                 <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px]">
                                     <div class="grid grid-cols-[2fr_1fr] p-10 h-full gap-4">
@@ -60,12 +76,12 @@
                                                 <span class="font-normal">{type()}:</span>
                                                 <span class="font-semibold">{item.type}</span>
                                             </div>
-                                            <p class="text-base text-[#ffffe6] font-semibold">{item.description}</p>
+                                            <p bind:this={descriptionElements[i]} class="text-base text-[#ffffe6] font-semibold">{item.description}</p>
                                             <div class="space-y-2 text-base">
                                                 <div>
                                                     <span class="font-normal">{loot()}:</span>
                                                     <button
-                                                        class="hover:text-gray-300 transition-colors font-semibold"
+                                                        class="hover:text-[#f15a22] transition-colors font-semibold"
                                                         on:click={() => copyToClipboard(item.loot)}
                                                     >
                                                         {item.loot}
@@ -100,7 +116,6 @@
                 </button>
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                     {#each items as _, i}
-                        <!-- svelte-ignore element_invalid_self_closing_tag -->
                         <button
                             class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
                             aria-label="Go to slide {i + 1}"
@@ -112,3 +127,7 @@
         </div>
     {/if}
 </div>
+
+{#if showToast}
+    <Toast />
+{/if}

@@ -20,10 +20,10 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-6 items-center text-base font-semibold">
-                <a href="/" aria-label="Daily Almanax" class="text-[#ffffe6] text-xl">{daily()}</a>
-                <a href="/weekly" aria-label="Weekly Almanax" class="text-[#ffffe6] text-xl">{weekly()}</a>
+                <a href="/" aria-label="Daily Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{daily()}</a>
+                <a href="/weekly" aria-label="Weekly Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{weekly()}</a>
                 <a href="/search" aria-label="Search Almanax">
-                    <img src="/search.svg" alt="Search" class="w-5 h-5 mt-[0.25rem]" />
+                    <img src="/search.svg" alt="Search" class="w-5 h-5 mt-[0.25rem] hover:opacity-70 transition-opacity" />
                 </a>
             </div>
 
@@ -49,7 +49,7 @@
                 <a href="/" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{daily()}</a>
                 <a href="/weekly" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{weekly()}</a>
                 <a href="/search" class="flex items-center gap-2 px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">
-                    <img src="/search.svg" alt="Search" class="w-4 h-4" />
+                    <img src="/search.svg" alt="Search" class="w-4 h-4 hover:opacity-70 transition-opacity" />
                 </a>
             </div>
         {/if}
