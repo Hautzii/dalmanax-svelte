@@ -11,7 +11,7 @@
 </script>
 
 {#if mounted}
-    <nav class="bg-[#10100e] py-4 px-6" in:fade={{ duration: 300 }}>
+    <nav class="bg-[#10100e] py-4 pt-6 px-6" in:fade={{ duration: 300 }}>
         <div class="max-w-7xl mx-auto flex justify-between items-center h-8">
             <div class="flex items-center gap-2">
                 <img src="/Dolmanax.webp" alt="Logo" class="h-12 w-12" />
@@ -55,7 +55,7 @@
         {/if}
     </nav>
 {:else}
-    <nav class="bg-[#10100e] py-4 px-6 opacity-0">
+    <nav class="bg-[#1e1e1e] py-4 pt-6 px-6 opacity-0">
         <div class="max-w-7xl mx-auto flex justify-between items-center h-8">
             <div class="flex items-center gap-2">
                 <img src="/Dolmanax.webp" alt="Logo" class="h-12 w-12" />

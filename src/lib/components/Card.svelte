@@ -52,7 +52,7 @@
     };
 </script>
 
-<div class="w-[65vw] mx-auto">
+<div class="w-[65vw] mx-auto -mt-24 overflow-hidden">
     {#if data !== undefined}
         <div class="relative py-6" in:fade={{ duration: 300 }}>
             <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px]">
@@ -63,7 +63,7 @@
                             <span class="font-normal">{type()}:</span>
                             <span class="font-semibold">{currentData.type}</span>
                         </div>
-                        <p bind:this={descriptionElement} class="text-base text-[#ffffe6] font-semibold max-h-[5.5rem] overflow-hidden">{currentData.description}</p>
+                        <p bind:this={descriptionElement} class="text-base text-[#ffffe6] font-semibold max-h-[5.5rem] overflow-hidden" >{currentData.description}</p>
                         <div class="space-y-2 text-base">
                             <div>
                                 <span class="font-normal">{loot()}:</span>

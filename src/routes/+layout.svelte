@@ -11,9 +11,9 @@
 </svelte:head>
 
 <ParaglideJS {i18n}>
-	<div class="min-h-screen bg-[#10100e] font-['Montserrat'] text-base">
+	<div class="h-screen bg-[#10100e] font-['Montserrat'] text-base overflow-hidden">
 		<Navbar />
-		<main class="container mx-auto px-4">
+		<main class="h-[calc(100vh-theme(spacing.16))] container mx-auto px-4 overflow-hidden">
 			{@render children()}
 		</main>
 	</div>

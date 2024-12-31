@@ -53,14 +53,31 @@
         });
     };
 
-    const scrollTo = (index: number) => {
+    const prevSlide = () => {
+        api?.scrollPrev();
+    };
+
+    const nextSlide = () => {
+        api?.scrollNext();
+    };
+
+    const goToSlide = (index: number) => {
         api?.scrollTo(index);
     };
 </script>
 
-<div class="w-[65vw] mx-auto">
+<div class="w-[65vw] mx-auto -mt-24">
     {#if items.length > 0}
         <div class="relative py-6" in:fade={{ duration: 300 }}>
+            <button
+                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 bg-[#1e1e1e] p-2 rounded-full shadow-md z-10"
+                on:click={() => prevSlide()}
+                aria-label="Previous slide"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="m14 18-6-6 6-6 1.4 1.4-4.6 4.6 4.6 4.6z" />
+                </svg>
+            </button>
             <div class="relative">
                 <div
                     use:emblaCarouselSvelte={{ options: { loop: true }, plugins: [] }}
@@ -70,7 +87,7 @@
                     <div class="flex">
                         {#each items as item, i}
                             <div class="flex-[0_0_100%] min-w-0">
-                                <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px]">
+                                <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px] relative">
                                     <div class="grid grid-cols-[2fr_1fr] p-10 h-full gap-4">
                                         <div class="flex flex-col justify-between h-full">
                                             <time class="text-xl font-semibold">{formatDate(item.date)}</time>
@@ -99,34 +116,31 @@
                                             <img src={item.image} alt={item.loot} class="max-h-48 object-contain" />
                                         </div>
                                     </div>
+                                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                                        {#each items as _, i}
+                                            <!-- svelte-ignore element_invalid_self_closing_tag -->
+                                            <button
+                                                class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
+                                                aria-label="Go to slide {i + 1}"
+                                                on:click={() => goToSlide(i)}
+                                            />
+                                        {/each}
+                                    </div>
                                 </div>
                             </div>
                         {/each}
                     </div>
                 </div>
-                <button
-                    class="absolute left-[-3rem] top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#1e1e1e] text-[#ffffe6] hover:bg-[#1e1e1e]/90"
-                    on:click={() => api?.scrollPrev()}
-                >
-                    <span class="text-xl">←</span>
-                </button>
-                <button
-                    class="absolute right-[-3rem] top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#1e1e1e] text-[#ffffe6] hover:bg-[#1e1e1e]/90"
-                    on:click={() => api?.scrollNext()}
-                >
-                    <span class="text-xl">→</span>
-                </button>
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                    {#each items as _, i}
-                        <!-- svelte-ignore element_invalid_self_closing_tag -->
-                        <button
-                            class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
-                            aria-label="Go to slide {i + 1}"
-                            on:click={() => scrollTo(i)}
-                        />
-                    {/each}
-                </div>
             </div>
+            <button
+                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 bg-[#1e1e1e] p-2 rounded-full shadow-md z-10"
+                on:click={() => nextSlide()}
+                aria-label="Next slide"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="m10 18-1.4-1.4 4.6-4.6-4.6-4.6L10 6l6 6z" />
+                </svg>
+            </button>
         </div>
     {/if}
 </div>
