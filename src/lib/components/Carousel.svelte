@@ -1,23 +1,14 @@
 <script lang="ts">
     import type { AlmanaxState } from '$lib/types/AlmanaxState';
     import { type, loot, quantity } from '$lib/paraglide/messages';
-    import { fly, fade } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import Toast from './Toast.svelte';
+    import emblaCarouselSvelte from 'embla-carousel-svelte';
 
     export let items: AlmanaxState[] = [];
-    let currentIndex = 0;
-    let direction = 1;
     let showToast = false;
-
-    function next() {
-        direction = 1;
-        currentIndex = (currentIndex + 1) % items.length;
-    }
-
-    function prev() {
-        direction = -1;
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-    }
+    let currentIndex = 0;
+    let api: any;
 
     function copyToClipboard(text: string) {
         navigator.clipboard.writeText(text);
@@ -34,149 +25,90 @@
             day: 'numeric' 
         });
     };
+
+    const onInit = (e: any) => {
+        api = e.detail;
+        api.on('select', () => {
+            currentIndex = api.selectedScrollSnap();
+        });
+    };
+
+    const scrollTo = (index: number) => {
+        api?.scrollTo(index);
+    };
 </script>
-
-<style>
-    .carousel-container {
-        position: relative;
-        overflow: hidden;
-        height: 300px;
-        width: 100%;
-    }
-
-    .almanax-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        padding: 2.5rem 2rem;
-        height: 300px;
-        gap: 1rem;
-    }
-
-    .almanax-text {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-    .almanax-image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-left: 1rem;
-    }
-
-    .dots-container {
-        position: absolute;
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    @media (max-width: 600px) {
-        .almanax-grid {
-            grid-template-columns: 1fr;
-            padding: 1rem;
-            height: 400px;
-        }
-
-        .almanax-text {
-            gap: 0.5rem;
-        }
-
-        .almanax-image {
-            padding: 1rem 0;
-        }
-
-        .almanax-image img {
-            max-width: 100px;
-        }
-
-        :global(p) {
-            font-size: 0.875rem;
-        }
-    }
-
-    @media (min-width: 1600px) {
-        .almanax-image {
-            padding-left: 5rem;
-        }
-    }
-</style>
 
 <Toast bind:show={showToast} />
 
 <div class="w-[65vw] mx-auto">
     {#if items.length > 0}
         <div class="relative py-6" in:fade={{ duration: 300 }}>
-            <button
-                class="absolute left-[-3rem] top-1/2 -translate-y-1/2 text-2xl opacity-50 hover:opacity-100 transition-opacity z-10"
-                on:click={prev}
-            >
-                ←
-            </button>
-
-            <div class="carousel-container">
-                {#key currentIndex}
-                    <div 
-                        class="absolute inset-0 bg-[#1e1e1e] rounded-xl shadow-md"
-                        in:fly|local={{ x: direction * 100, duration: 500 }}
-                        out:fly|local={{ x: direction * -100, duration: 500 }}
-                    >
-                        <div class="almanax-grid">
-                            <div class="almanax-text">
-                                <time class="text-xl font-semibold">{formatDate(items[currentIndex].date)}</time>
-                                <div class="text-base">
-                                    <span class="font-normal">{type()}:</span>
-                                    <span class="font-semibold">{items[currentIndex].type}</span>
-                                </div>
-                                <p class="text-base text-[#ffffe6] font-semibold">{items[currentIndex].description}</p>
-                                <div class="space-y-2 text-base">
-                                    <div>
-                                        <span class="font-normal">{loot()}:</span>
-                                        <button
-                                            class="hover:text-gray-300 transition-colors font-semibold"
-                                            on:click={() => copyToClipboard(items[currentIndex].loot)}
-                                        >
-                                            {items[currentIndex].loot}
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <span class="font-normal">{quantity()}:</span>
-                                        <span class="font-semibold">{items[currentIndex].quantity}</span>
+            <div class="relative">
+                <div
+                    use:emblaCarouselSvelte={{ options: { loop: true }, plugins: [] }}
+                    on:emblaInit={onInit}
+                    class="overflow-hidden"
+                >
+                    <div class="flex">
+                        {#each items as item}
+                            <div class="flex-[0_0_100%] min-w-0">
+                                <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px]">
+                                    <div class="grid grid-cols-[2fr_1fr] p-10 h-full gap-4">
+                                        <div class="flex flex-col justify-between h-full">
+                                            <time class="text-xl font-semibold">{formatDate(item.date)}</time>
+                                            <div class="text-base">
+                                                <span class="font-normal">{type()}:</span>
+                                                <span class="font-semibold">{item.type}</span>
+                                            </div>
+                                            <p class="text-base text-[#ffffe6] font-semibold">{item.description}</p>
+                                            <div class="space-y-2 text-base">
+                                                <div>
+                                                    <span class="font-normal">{loot()}:</span>
+                                                    <button
+                                                        class="hover:text-gray-300 transition-colors font-semibold"
+                                                        on:click={() => copyToClipboard(item.loot)}
+                                                    >
+                                                        {item.loot}
+                                                    </button>
+                                                </div>
+                                                <div>
+                                                    <span class="font-normal">{quantity()}:</span>
+                                                    <span class="font-semibold">{item.quantity}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-center items-center pl-4">
+                                            <img src={item.image} alt={item.loot} class="max-h-48 object-contain" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="almanax-image">
-                                <img src={items[currentIndex].image} alt={items[currentIndex].loot} class="max-h-48 object-contain" />
-                            </div>
-                        </div>
-
-                        <div class="dots-container">
-                            {#each Array(items.length) as _, i}
-                                <!-- svelte-ignore element_invalid_self_closing_tag -->
-                                <button
-                                    class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
-                                    aria-label={`Go to slide ${i + 1}`}
-                                    on:click={() => {
-                                        direction = i > currentIndex ? 1 : -1;
-                                        currentIndex = i;
-                                    }}
-                                />
-                            {/each}
-                        </div>
+                        {/each}
                     </div>
-                {/key}
+                </div>
+                <button
+                    class="absolute left-[-3rem] top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#1e1e1e] text-[#ffffe6] hover:bg-[#1e1e1e]/90"
+                    on:click={() => api?.scrollPrev()}
+                >
+                    <span class="text-xl">←</span>
+                </button>
+                <button
+                    class="absolute right-[-3rem] top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-[#1e1e1e] text-[#ffffe6] hover:bg-[#1e1e1e]/90"
+                    on:click={() => api?.scrollNext()}
+                >
+                    <span class="text-xl">→</span>
+                </button>
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                    {#each items as _, i}
+                        <!-- svelte-ignore element_invalid_self_closing_tag -->
+                        <button
+                            class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
+                            aria-label="Go to slide {i + 1}"
+                            on:click={() => scrollTo(i)}
+                        />
+                    {/each}
+                </div>
             </div>
-
-            <button
-                class="absolute right-[-3rem] top-1/2 -translate-y-1/2 text-2xl opacity-50 hover:opacity-100 transition-opacity z-10"
-                on:click={next}
-            >
-                →
-            </button>
         </div>
     {/if}
 </div>
