@@ -19,9 +19,11 @@
                 const lines = height / lineHeight;
                 
                 if (lines > 3) {
-                    element.style.fontSize = '0.875rem';
+                    element.style.lineHeight = '1.2';
+                    element.style.paddingBottom = '0';
                 } else {
-                    element.style.fontSize = '1rem';
+                    element.style.lineHeight = '1.5';
+                    element.style.paddingBottom = '0.5rem';
                 }
             }
         });
@@ -76,7 +78,7 @@
                                                 <span class="font-normal">{type()}:</span>
                                                 <span class="font-semibold">{item.type}</span>
                                             </div>
-                                            <p bind:this={descriptionElements[i]} class="text-base text-[#ffffe6] font-semibold">{item.description}</p>
+                                            <p bind:this={descriptionElements[i]} class="text-base text-[#ffffe6] font-semibold max-h-[5.5rem] overflow-hidden">{item.description}</p>
                                             <div class="space-y-2 text-base">
                                                 <div>
                                                     <span class="font-normal">{loot()}:</span>
@@ -116,6 +118,7 @@
                 </button>
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                     {#each items as _, i}
+                        <!-- svelte-ignore element_invalid_self_closing_tag -->
                         <button
                             class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
                             aria-label="Go to slide {i + 1}"

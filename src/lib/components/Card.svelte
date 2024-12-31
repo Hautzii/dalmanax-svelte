@@ -26,9 +26,11 @@
         const lines = height / lineHeight;
         
         if (lines > 3) {
-            descriptionElement.style.fontSize = '0.875rem';
+            descriptionElement.style.lineHeight = '1.2';
+            descriptionElement.style.paddingBottom = '0';
         } else {
-            descriptionElement.style.fontSize = '1rem';
+            descriptionElement.style.lineHeight = '1.5';
+            descriptionElement.style.paddingBottom = '0.5rem';
         }
     }
 
@@ -61,7 +63,7 @@
                             <span class="font-normal">{type()}:</span>
                             <span class="font-semibold">{currentData.type}</span>
                         </div>
-                        <p bind:this={descriptionElement} class="text-base text-[#ffffe6] font-semibold overflow-hidden">{currentData.description}</p>
+                        <p bind:this={descriptionElement} class="text-base text-[#ffffe6] font-semibold max-h-[5.5rem] overflow-hidden">{currentData.description}</p>
                         <div class="space-y-2 text-base">
                             <div>
                                 <span class="font-normal">{loot()}:</span>
