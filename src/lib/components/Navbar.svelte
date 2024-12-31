@@ -1,6 +1,5 @@
 <script lang="ts">
     import { daily, weekly } from '$lib/paraglide/messages';
-    import { fade } from 'svelte/transition';
     import { onMount } from 'svelte';
     let isOpen = false;
     let mounted = false;
@@ -11,7 +10,7 @@
 </script>
 
 {#if mounted}
-    <nav class="bg-[#10100e] py-4 pt-6 px-6" in:fade={{ duration: 300 }}>
+    <nav class="bg-[#10100e] py-4 pt-6 px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center h-8">
             <div class="flex items-center gap-2">
                 <img src="/Dolmanax.webp" alt="Logo" class="h-12 w-12" />
@@ -45,7 +44,7 @@
 
         <!-- Mobile Menu -->
         {#if isOpen}
-            <div class="md:hidden mt-4 text-base font-semibold" transition:fade={{ duration: 200 }}>
+            <div class="md:hidden mt-4 text-base font-semibold">
                 <a href="/" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{daily()}</a>
                 <a href="/weekly" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{weekly()}</a>
                 <a href="/search" class="flex items-center gap-2 px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">
