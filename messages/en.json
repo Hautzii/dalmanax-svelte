@@ -4,8 +4,9 @@
     "weekly": "Weekly",
     "daily_almanax": "Daily Almanax",
     "weekly_almanax": "Weekly Almanax",
-    "almanax_search": "Almanax Search",
+    "search_almanax": "Almanax Search",
     "type": "Type",
     "loot": "Offering",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "clipboard": "Copied to clipboard!"
 }

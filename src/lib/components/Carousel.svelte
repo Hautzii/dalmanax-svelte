@@ -1,30 +1,37 @@
 <script lang="ts">
     import type { AlmanaxState } from '$lib/types/AlmanaxState';
-    import { onMount } from 'svelte';
     import { type, loot, quantity } from '$lib/paraglide/messages';
-    import { fly, fade, crossfade } from 'svelte/transition';
-    import { cubicOut } from 'svelte/easing';
+    import { fly, fade } from 'svelte/transition';
+    import Toast from './Toast.svelte';
 
     export let items: AlmanaxState[] = [];
     let currentIndex = 0;
     let direction = 1;
+    let showToast = false;
 
-    const next = () => {
+    function next() {
         direction = 1;
         currentIndex = (currentIndex + 1) % items.length;
-    };
+    }
 
-    const prev = () => {
+    function prev() {
         direction = -1;
         currentIndex = (currentIndex - 1 + items.length) % items.length;
-    };
+    }
+
+    function copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
+        showToast = true;
+        setTimeout(() => {
+            showToast = false;
+        }, 2000);
+    }
 
     const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString(undefined, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
+        return new Date(date).toLocaleDateString(undefined, { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
         });
     };
 </script>
@@ -62,12 +69,10 @@
     .dots-container {
         position: absolute;
         bottom: 1rem;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
         display: flex;
-        justify-content: center;
         gap: 0.5rem;
-        padding: 0.5rem;
     }
 
     @media (max-width: 600px) {
@@ -101,49 +106,57 @@
     }
 </style>
 
+<Toast bind:show={showToast} />
+
 <div class="w-[65vw] mx-auto">
     {#if items.length > 0}
-        <div class="relative py-6">
+        <div class="relative py-6" in:fade={{ duration: 300 }}>
             <button
                 class="absolute left-[-3rem] top-1/2 -translate-y-1/2 text-2xl opacity-50 hover:opacity-100 transition-opacity z-10"
                 on:click={prev}
             >
                 ←
             </button>
-            <button
-                class="absolute right-[-3rem] top-1/2 -translate-y-1/2 text-2xl opacity-50 hover:opacity-100 transition-opacity z-10"
-                on:click={next}
-            >
-                →
-            </button>
 
             <div class="carousel-container">
                 {#key currentIndex}
                     <div 
                         class="absolute inset-0 bg-[#1e1e1e] rounded-xl shadow-md"
-                        in:fly|local={{ x: direction * 100, duration: 300 }}
-                        out:fly|local={{ x: direction * -100, duration: 300 }}
+                        in:fly|local={{ x: direction * 100, duration: 500 }}
+                        out:fly|local={{ x: direction * -100, duration: 500 }}
                     >
-                        <div class="almanax-grid" in:fade={{ duration: 150 }}>
+                        <div class="almanax-grid">
                             <div class="almanax-text">
                                 <time class="text-xl font-semibold">{formatDate(items[currentIndex].date)}</time>
-                                
-                                <p><span class="font-normal">{type()}:</span> <span class="font-semibold">{items[currentIndex].type}</span></p>
-                                
+                                <div class="text-base">
+                                    <span class="font-normal">{type()}:</span>
+                                    <span class="font-semibold">{items[currentIndex].type}</span>
+                                </div>
                                 <p class="text-base text-[#ffffe6] font-semibold">{items[currentIndex].description}</p>
-
                                 <div class="space-y-2 text-base">
-                                    <p><span class="font-normal">{loot()}:</span> <span class="font-semibold">{items[currentIndex].loot}</span></p>
-                                    <p><span class="font-normal">{quantity()}:</span> <span class="font-semibold">{items[currentIndex].quantity}</span></p>
+                                    <div>
+                                        <span class="font-normal">{loot()}:</span>
+                                        <button
+                                            class="hover:text-gray-300 transition-colors font-semibold"
+                                            on:click={() => copyToClipboard(items[currentIndex].loot)}
+                                        >
+                                            {items[currentIndex].loot}
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <span class="font-normal">{quantity()}:</span>
+                                        <span class="font-semibold">{items[currentIndex].quantity}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="almanax-image">
-                                <img src={items[currentIndex].image} alt={items[currentIndex].type} class="max-h-48 object-contain" />
+                                <img src={items[currentIndex].image} alt={items[currentIndex].loot} class="max-h-48 object-contain" />
                             </div>
                         </div>
 
                         <div class="dots-container">
                             {#each Array(items.length) as _, i}
+                                <!-- svelte-ignore element_invalid_self_closing_tag -->
                                 <button
                                     class="w-2.5 h-2.5 rounded-full transition-colors duration-200 {currentIndex === i ? 'bg-[#ffffe6]' : 'bg-[#10100e]'}"
                                     aria-label={`Go to slide ${i + 1}`}
@@ -157,6 +170,13 @@
                     </div>
                 {/key}
             </div>
+
+            <button
+                class="absolute right-[-3rem] top-1/2 -translate-y-1/2 text-2xl opacity-50 hover:opacity-100 transition-opacity z-10"
+                on:click={next}
+            >
+                →
+            </button>
         </div>
     {/if}
 </div>

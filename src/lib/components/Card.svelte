@@ -3,13 +3,23 @@
     import { fade } from 'svelte/transition';
     import { type, loot, quantity } from '$lib/paraglide/messages';
     import type { AlmanaxState } from '../types/AlmanaxState';
-    
+    import Toast from './Toast.svelte';
+
     export let fetchFunction: () => Promise<AlmanaxState>;
-    let data: AlmanaxState | null = null;
+    let data: AlmanaxState | undefined;
+    let showToast = false;
 
     onMount(async () => {
         data = await fetchFunction();
     });
+
+    function copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text);
+        showToast = true;
+        setTimeout(() => {
+            showToast = false;
+        }, 2000);
+    }
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString(undefined, { 
@@ -74,9 +84,11 @@
     }
 </style>
 
+<Toast bind:show={showToast} />
+
 <div class="w-[65vw] mx-auto">
-    {#if data}
-        <div class="bg-[#1e1e1e] rounded-xl shadow-md" transition:fade={{ duration: 300 }}>
+    {#if data !== undefined}
+        <div class="bg-[#1e1e1e] rounded-xl shadow-md" in:fade={{ duration: 300 }}>
             <div class="almanax-grid">
                 <div class="almanax-text">
                     <time class="text-xl font-semibold">{formatDate(data.date)}</time>
@@ -88,7 +100,12 @@
                     <div class="space-y-2 text-base">
                         <div>
                             <span class="font-normal">{loot()}:</span>
-                            <span class="font-semibold">{data.loot}</span>
+                            <button
+                                class="hover:text-gray-300 transition-colors font-semibold"
+                                on:click={() => copyToClipboard(data.loot)}
+                            >
+                                {data.loot}
+                            </button>
                         </div>
                         <div>
                             <span class="font-normal">{quantity()}:</span>
