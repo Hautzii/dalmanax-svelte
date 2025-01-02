@@ -11,7 +11,7 @@
     let descriptionElements: HTMLParagraphElement[] = [];
 
     const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString(undefined, {
+        return new Date(date).toLocaleDateString('fr-FR', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
