@@ -1,10 +1,14 @@
 <script lang="ts">
     import { daily, weekly } from '$lib/paraglide/messages';
     import { onMount } from 'svelte';
-    let isOpen = false;
-    let mounted = false;
-
+    let isOpen = $state(false);
+    let mounted = $state(false);
+    let dailyText = $state('');
+    let weeklyText = $state('');
+    
     onMount(() => {
+        dailyText = daily();
+        weeklyText = weekly();
         mounted = true;
     });
 </script>
@@ -19,8 +23,8 @@
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-6 items-center text-base font-semibold">
-                <a href="/" aria-label="Daily Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{daily()}</a>
-                <a href="/weekly" aria-label="Weekly Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{weekly()}</a>
+                <a href="/" aria-label="Daily Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{dailyText}</a>
+                <a href="/weekly" aria-label="Weekly Almanax" class="text-[#ffffe6] hover:text-[#ffffe6]/70 transition-colors text-xl">{weeklyText}</a>
                 <a href="/search" aria-label="Search Almanax">
                     <img src="/search.svg" alt="Search" class="w-5 h-5 mt-[0.25rem] hover:opacity-70 transition-opacity" />
                 </a>
@@ -29,7 +33,7 @@
             <!-- Mobile Menu Button -->
             <button
                 class="md:hidden text-[#ffffe6]"
-                on:click={() => (isOpen = !isOpen)}
+                onclick={() => (isOpen = !isOpen)}
                 aria-label={isOpen ? 'Close Menu' : 'Open Menu'}
             >
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,8 +49,8 @@
         <!-- Mobile Menu -->
         {#if isOpen}
             <div class="md:hidden mt-4 text-base font-semibold">
-                <a href="/" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{daily()}</a>
-                <a href="/weekly" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{weekly()}</a>
+                <a href="/" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{dailyText}</a>
+                <a href="/weekly" class="block px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">{weeklyText}</a>
                 <a href="/search" class="flex items-center gap-2 px-4 py-2 text-[#ffffe6] hover:bg-[#2a2a2a]">
                     <img src="/search.svg" alt="Search" class="w-4 h-4 hover:opacity-70 transition-opacity" />
                 </a>
