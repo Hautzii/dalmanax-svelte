@@ -5,10 +5,17 @@
     import Toast from './Toast.svelte';
 
     export let fetchFunction: () => Promise<AlmanaxState>;
+    export let key = 0; 
     let data: AlmanaxState | undefined = undefined;
     let showToast = false;
     let descriptionElement: HTMLParagraphElement;
     let currentData: AlmanaxState;
+
+    $: if (key) {
+        fetchFunction().then(newData => {
+            data = newData;
+        });
+    }
 
     onMount(async () => {
         data = await fetchFunction();
