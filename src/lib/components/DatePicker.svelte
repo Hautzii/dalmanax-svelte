@@ -9,7 +9,7 @@ import { onMount } from "svelte";
 
 export let onDateSelect: (date: string) => void;
 export let initialDate: string | undefined = undefined;
-export let language: string = 'en';
+export let language: string = 'fr-FR';
 
 let value: DateValue | undefined = undefined;
 let open = false;
@@ -21,15 +21,12 @@ onMount(() => {
 });
 
 function formatDate(date: Date): string {
-  console.log('Current language:', language);
   const formatter = new Intl.DateTimeFormat(language, {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric'
   });
-  const formatted = formatter.format(date);
-  console.log('Formatted date:', formatted);
-  return formatted;
+  return formatter.format(date);
 }
 
 $: if (value) {
@@ -45,12 +42,12 @@ $: if (value) {
   <Popover.Trigger asChild let:builder>
     <Button
       class={cn(
-        "w-[150px] justify-center font-semibold bg-[#1e1e1e] text-[#ffffe6]"
+        "max-w-[300px] justify-center font-semibold bg-[#1e1e1e] text-[#ffffe6]"
       )}
       builders={[builder]}
     >
       <CalendarIcon class="mr-2 h-4 w-4" />
-      {value ? formatDate(value.toDate(getLocalTimeZone())) : "Select a date"}
+      {value ? formatDate(value.toDate(getLocalTimeZone())) : "Sélectionner une date"}
     </Button>
   </Popover.Trigger>
   <Popover.Content
@@ -60,6 +57,7 @@ $: if (value) {
       <Calendar
         bind:value
         initialFocus
+        locale={language}
         class={cn(
           "p-3",
           "[&_button]:text-[#ffffe6]",

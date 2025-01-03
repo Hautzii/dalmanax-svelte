@@ -10,6 +10,7 @@
 	export let value: $$Props["value"] = undefined;
 	export let placeholder: $$Props["placeholder"] = undefined;
 	export let weekdayFormat: $$Props["weekdayFormat"] = "short";
+	export let locale: $$Props["locale"] = "fr-FR";
 
 	let className: $$Props["class"] = undefined;
 	export { className as class };
@@ -19,6 +20,7 @@
 	bind:value
 	bind:placeholder
 	{weekdayFormat}
+	{locale}
 	class={cn("p-3", className)}
 	{...$$restProps}
 	on:keydown
