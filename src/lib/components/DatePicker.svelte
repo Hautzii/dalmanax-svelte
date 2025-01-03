@@ -24,7 +24,7 @@ function formatDate(date: Date): string {
   console.log('Current language:', language);
   const formatter = new Intl.DateTimeFormat(language, {
     year: 'numeric',
-    month: 'numeric',
+    month: 'short',
     day: 'numeric'
   });
   const formatted = formatter.format(date);
@@ -45,7 +45,7 @@ $: if (value) {
   <Popover.Trigger asChild let:builder>
     <Button
       class={cn(
-        "w-[150px] justify-center font-normal bg-[#1e1e1e] text-[#ffffe6]"
+        "w-[150px] justify-center font-semibold bg-[#1e1e1e] text-[#ffffe6]"
       )}
       builders={[builder]}
     >

@@ -79,25 +79,23 @@
                             <div class="flex-[0_0_100%] min-w-0">
                                 <div class="relative py-6">
                                     <div class="bg-[#1e1e1e] rounded-xl shadow-md h-[300px] relative">
-                                        <div class="grid grid-cols-[2fr_1fr] p-10 h-full gap-4">
-                                            <div class="flex flex-col justify-between h-full">
+                                        <div class="grid grid-cols-[2fr_1fr] p-10 h-[300px] gap-4">
+                                            <div class="flex flex-col gap-3">
                                                 <time class="text-xl font-semibold">{formatDate(item.date)}</time>
                                                 <div class="text-base">
                                                     <span class="font-normal">{type()}:</span>
                                                     <span class="font-semibold">{item.type}</span>
                                                 </div>
-                                                <p bind:this={descriptionElements[i]} class="text-base text-[#ffffe6] font-semibold max-h-[5.5rem] overflow-hidden">{item.description}</p>
-                                                <div class="space-y-2 text-base">
-                                                    <div>
-                                                        <span class="font-normal">{loot()}:</span>
-                                                        <button class="hover:text-[#f15a22] transition-colors font-semibold" on:click={() => copyToClipboard(item.loot)}>
-                                                            {item.loot}
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <span class="font-normal">{quantity()}:</span>
-                                                        <span class="font-semibold">{item.quantity}</span>
-                                                    </div>
+                                                <p bind:this={descriptionElements[i]} class="text-base text-[#ffffe6] font-semibold">{item.description}</p>
+                                                <div>
+                                                    <span class="font-normal">{loot()}:</span>
+                                                    <button class="hover:text-[#f15a22] transition-colors font-semibold" on:click={() => copyToClipboard(item.loot)}>
+                                                        {item.loot}
+                                                    </button>
+                                                </div>
+                                                <div>
+                                                    <span class="font-normal">{quantity()}:</span>
+                                                    <span class="font-semibold">{item.quantity}</span>
                                                 </div>
                                             </div>
                                             <div class="flex justify-center items-center pl-4">
